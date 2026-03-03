@@ -323,20 +323,39 @@
 
         <div class="relative w-full aspect-video md:aspect-[21/9] module-border bg-black/10 overflow-hidden">
             <div class="absolute inset-0 grid-overlay opacity-30"></div>
-            <svg viewBox="0 0 1000 400" class="w-full h-full">
-                <line x1="500" y1="0" x2="500" y2="400" stroke="white" stroke-width="0.5" stroke-opacity="0.1" />
-                <line x1="0" y1="200" x2="1000" y2="200" stroke="white" stroke-width="0.5" stroke-opacity="0.1" />
-                <circle cx="500" cy="200" r="150" fill="none" stroke="white" stroke-width="0.5" stroke-opacity="0.05" />
-                <g class="radar-line">
-                    <line x1="500" y1="200" x2="500" y2="50" stroke="var(--golden)" stroke-width="1.5" stroke-opacity="0.8" />
-                </g>
-                <rect x="475" y="175" width="50" height="50" stroke="var(--golden)" fill="none" stroke-width="1" class="animate-infra" />
-                <!-- Placeholder chevron hub icon -->
-                <svg x="485" y="185" width="30" height="30" viewBox="0 0 100 100" class="text-[#FFCC33] fill-none logo-chevron">
-                    <path d="M25 80L50 20L75 80" stroke="currentColor" stroke-width="10"/>
-                </svg>
-                <text x="500" y="160" fill="var(--golden)" font-size="7" text-anchor="middle" class="mono font-bold animate-infra">CORE_AI_PROCESSOR</text>
-            </svg>
+            <svg <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+    <svg viewBox="0 0 1000 400" class="w-full h-full opacity-60">
+
+        <!-- Background Grid Lines -->
+        <line x1="500" y1="0" x2="500" y2="400" stroke="white" stroke-width="0.5" stroke-opacity="0.08"/>
+        <line x1="0" y1="200" x2="1000" y2="200" stroke="white" stroke-width="0.5" stroke-opacity="0.08"/>
+
+        <!-- NODE LEFT -->
+        <g class="radar-node" transform="translate(250,200)">
+            <circle class="pulse pulse1" r="15"/>
+            <circle class="pulse pulse2" r="15"/>
+            <circle class="core-dot red" r="4"/>
+        </g>
+
+        <!-- NODE RIGHT -->
+        <g class="radar-node" transform="translate(750,150)">
+            <circle class="pulse pulse1" r="15"/>
+            <circle class="pulse pulse2" r="15"/>
+            <circle class="core-dot green" r="4"/>
+        </g>
+
+        <!-- CENTER PROCESSOR -->
+        <g transform="translate(500,200)">
+            <rect x="-25" y="-25" width="50" height="50"
+                  stroke="var(--golden)" fill="none"
+                  stroke-width="1"
+                  class="animate-infra"/>
+            <circle class="pulse pulse-center" r="30"/>
+        </g>
+
+    </svg>
+</div>
+    </svg>
         </div>
     </section>
 
