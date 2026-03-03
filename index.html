@@ -25,6 +25,7 @@
             padding: 0;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
         h1, h2, h3, .technical {
@@ -40,22 +41,33 @@
             letter-spacing: 0.1em;
         }
 
-        /* HUD Corner Markers */
+        /* Tactical Pulse for Infrastructure Lines (Stronger) */
+        @keyframes pulse-infra {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        .animate-infra {
+            animation: pulse-infra 4s ease-in-out infinite;
+        }
+
+        /* HUD Corner Markers - Restored weight and color */
         .hud-corner {
             position: absolute;
             width: 15px;
             height: 15px;
             border: 1px solid var(--golden);
-            opacity: 0.4;
+            opacity: 0.8;
         }
 
-        /* Tactical Grid Overlay */
+        /* Tactical Overlay for Hero/Outro */
         .grid-overlay {
             background-image: radial-gradient(circle, rgba(234, 230, 218, 0.05) 1px, transparent 1px);
-            background-size: 40px 40px;
+            background-size: 30px 30px;
         }
 
-        /* Scanning Line Animation */
+        /* Enhanced Scanning Line Animation - More Noticeable */
         @keyframes scan {
             0% { transform: translateY(-100%); }
             100% { transform: translateY(100vh); }
@@ -63,11 +75,13 @@
         .scan-line {
             position: absolute;
             top: 0; left: 0; right: 0;
-            height: 2px;
+            height: 2px; /* Increased height */
             background: linear-gradient(to right, transparent, var(--golden), transparent);
-            opacity: 0.1;
-            animation: scan 8s linear infinite;
+            box-shadow: 0 0 15px var(--golden); /* Added glow */
+            opacity: 0.3; /* Increased opacity */
+            animation: scan 8s linear infinite; /* Slightly faster for more kinetic energy */
             pointer-events: none;
+            z-index: 10;
         }
 
         .btn-tactical-primary {
@@ -79,6 +93,8 @@
             align-items: center;
             gap: 10px;
             transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
         }
         .btn-tactical-primary:hover {
             background-color: var(--golden);
@@ -91,13 +107,18 @@
             padding: 1rem 2rem;
             font-weight: 700;
             transition: all 0.2s ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
         }
         .btn-tactical-outline:hover {
             background-color: rgba(255, 204, 51, 0.1);
+            transform: scale(1.02);
         }
 
         .module-border {
             border: 1px solid rgba(234, 230, 218, 0.1);
+            backdrop-blur: 2px;
         }
 
         /* Radar Animation */
@@ -107,7 +128,7 @@
         }
         .radar-line {
             transform-origin: center;
-            animation: radar-sweep 4s linear infinite;
+            animation: radar-sweep 8s linear infinite;
         }
 
         /* Cinematic Outro Slow Zoom */
@@ -118,11 +139,63 @@
         .animate-cinematic {
             animation: cinematic-zoom 20s ease-out infinite alternate;
         }
+
+        /* Placeholder Logo Styling - Chevron 'A' */
+        .logo-placeholder {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-chevron {
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* Modal Styles */
+        #contact-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(59, 60, 42, 0.98);
+            z-index: 100;
+            backdrop-filter: blur(15px);
+        }
+        
+        #contact-modal.active {
+            display: flex;
+        }
+
+        /* Form Controls */
+        input:focus, textarea:focus {
+            border-color: var(--golden);
+        }
     </style>
 </head>
 <body>
 
     <div class="scan-line"></div>
+
+    <!-- NAVIGATION -->
+    <nav class="fixed top-0 left-0 w-full z-50 px-10 py-6 flex justify-between items-center mix-blend-difference">
+        <div class="flex items-center gap-4">
+            <!-- LOGO PLACEHOLDER: Chevron A -->
+            <div class="logo-placeholder w-10 h-10">
+                <svg viewBox="0 0 100 100" class="w-full h-full text-[#FFCC33] fill-none logo-chevron">
+                    <path d="M25 80L50 20L75 80" stroke="currentColor"/>
+                </svg>
+            </div>
+            <div class="hidden md:block">
+                <div class="mono text-[0.6rem] leading-none tracking-widest font-bold text-[#EAE6DA]">ANASHIELD</div>
+            </div>
+        </div>
+        <div class="flex items-center gap-8 mono text-[0.55rem] tracking-[0.2em] opacity-80">
+            <a href="#threat" class="hover:text-[#FFCC33] transition-colors">THE_THREAT</a>
+            <a href="#architecture" class="hover:text-[#FFCC33] transition-colors">ARCHITECTURE</a>
+            <button onclick="toggleModal()" class="border border-[#FFCC33]/40 px-4 py-2 hover:border-[#FFCC33] hover:text-[#FFCC33] transition-all bg-transparent cursor-pointer text-[#EAE6DA]">SECURE_ACCESS</button>
+        </div>
+    </nav>
 
     <!-- 1) TACTICAL HERO SECTION -->
     <section class="relative h-screen w-full flex flex-col justify-end overflow-hidden grid-overlay">
@@ -130,12 +203,6 @@
         <div class="absolute top-10 right-10 hud-corner border-l-0 border-b-0"></div>
         <div class="absolute bottom-10 left-10 hud-corner border-r-0 border-t-0"></div>
         <div class="absolute bottom-10 right-10 hud-corner border-l-0 border-t-0"></div>
-
-        <div class="absolute top-10 left-20 mono text-opacity-60 text-sand flex flex-col gap-1">
-            <span>CORE_SYSTEM: ARM_ST_01</span>
-            <span>LAT: 52.5200° N | LONG: 13.4050° E</span>
-            <span class="text-[#FFCC33]">STATUS: ACTIVE_SURVEILLANCE</span>
-        </div>
 
         <video autoplay muted loop playsinline class="absolute inset-0 z-0 w-full h-full object-cover grayscale opacity-20">
             <source src="hero.mp4" type="video/mp4">
@@ -145,21 +212,28 @@
 
         <div class="relative z-20 px-10 md:px-20 pb-20 w-full grid grid-cols-1 md:grid-cols-12 gap-10 items-end">
             <div class="md:col-span-8">
-                <div class="mono text-[#FFCC33] mb-4 tracking-[0.3em]">Acoustic & AI Intelligence for Aerial Threats</div>
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="logo-placeholder w-8 h-8">
+                        <svg viewBox="0 0 100 100" class="w-full h-full text-[#FFCC33] fill-none logo-chevron">
+                            <path d="M25 80L50 20L75 80" stroke="currentColor" stroke-width="4"/>
+                        </svg>
+                    </div>
+                    <div class="mono text-[#FFCC33] tracking-[0.3em] font-bold">Acoustic & AI Intelligence for Aerial Threats</div>
+                </div>
                 <h1 class="text-6xl md:text-9xl font-bold mb-6 leading-none">ANASHIELD</h1>
                 <p class="text-xl md:text-2xl font-light max-w-2xl opacity-80 leading-relaxed mb-10">
                     Sovereign protection for <span class="text-white font-medium">critical infrastructure</span>. Early detection and informed interception of proliferating low-altitude threats.
                 </p>
                 <div class="flex flex-wrap gap-4">
-                    <button class="btn-tactical-primary uppercase tracking-widest">Initiate Dialogue</button>
-                    <button class="btn-tactical-outline uppercase tracking-widest">View Architecture</button>
+                    <button onclick="toggleModal()" class="btn-tactical-primary uppercase tracking-widest">Initiate Dialogue</button>
+                    <a href="#architecture" class="btn-tactical-outline uppercase tracking-widest">View Architecture</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 2) THE THREAT LANDSCAPE (The Problem) -->
-    <section class="bg-[#EAE6DA] text-[#3B3C2A] py-32 px-10 md:px-20 border-y border-[#3B3C2A]/10">
+    <!-- 2) THE THREAT LANDSCAPE -->
+    <section id="threat" class="relative z-10 bg-[#EAE6DA] text-[#3B3C2A] py-32 px-10 md:px-20 border-y border-[#3B3C2A]/10">
         <div class="max-w-7xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-20">
                 <div class="lg:col-span-5">
@@ -173,15 +247,15 @@
 
             <div class="mono text-xs mb-8 opacity-60">Current Countermeasure Limitations</div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-                <div class="p-8 border border-[#3B3C2A]/20 bg-[#3B3C2A]/5 min-h-[220px] flex flex-col justify-between">
+                <div class="p-8 border border-[#3B3C2A]/20 bg-[#3B3C2A]/5 min-h-[220px] flex flex-col justify-between backdrop-blur-sm transition-all hover:border-[#FFCC33]/40">
                     <span class="mono text-[0.6rem] opacity-40">LMT_01</span>
                     <p class="text-xl font-medium">High in cost relative to incoming threats.</p>
                 </div>
-                <div class="p-8 border border-[#3B3C2A]/20 bg-[#3B3C2A]/5 min-h-[220px] flex flex-col justify-between">
+                <div class="p-8 border border-[#3B3C2A]/20 bg-[#3B3C2A]/5 min-h-[220px] flex flex-col justify-between backdrop-blur-sm transition-all hover:border-[#FFCC33]/40">
                     <span class="mono text-[0.6rem] opacity-40">LMT_02</span>
                     <p class="text-xl font-medium">Designed for high-end military contexts only.</p>
                 </div>
-                <div class="p-8 border border-[#3B3C2A]/20 bg-[#3B3C2A]/5 min-h-[220px] flex flex-col justify-between">
+                <div class="p-8 border border-[#3B3C2A]/20 bg-[#3B3C2A]/5 min-h-[220px] flex flex-col justify-between backdrop-blur-sm transition-all hover:border-[#FFCC33]/40">
                     <span class="mono text-[0.6rem] opacity-40">LMT_03</span>
                     <p class="text-xl font-medium">Hard to deploy at scale across civil or hybrid environments.</p>
                 </div>
@@ -198,16 +272,16 @@
         </div>
     </section>
 
-    <!-- 3) OUR MISSION (The Intent) -->
-    <section class="bg-[#3B3C2A] py-32 px-10 md:px-20">
+    <!-- 3) OUR MISSION -->
+    <section class="relative z-10 bg-[#3B3C2A] py-32 px-10 md:px-20">
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-16 items-center">
             <div class="md:col-span-6">
-                <div class="mono text-[#FFCC33] mb-6">Our Mission</div>
+                <div class="mono text-[#FFCC33] mb-6 font-bold">Our Mission</div>
                 <h2 class="text-4xl md:text-6xl font-bold mb-8 uppercase leading-tight">Technology for Sovereign Protection.</h2>
                 <p class="text-xl opacity-80 leading-relaxed font-light mb-8">
                     Anashield provides the sensing architectures necessary for the defense of critical infrastructure. Our solutions enable early detection of aerial threats and informed interception.
                 </p>
-                <div class="grid grid-cols-2 gap-4 text-xs mono opacity-40">
+                <div class="grid grid-cols-2 gap-4 text-xs mono text-[#FFCC33] opacity-60">
                     <div>[ PROTECTING CITIES ]</div>
                     <div>[ SECURING BORDERS ]</div>
                     <div>[ ENERGY ASSETS ]</div>
@@ -217,12 +291,11 @@
             <div class="md:col-span-6 relative aspect-square module-border bg-black/20 overflow-hidden">
                 <div class="absolute inset-0 grid-overlay opacity-10"></div>
                 <div class="absolute inset-0 flex items-center justify-center">
-                    <!-- Abstract Visualization of Infrastructure -->
-                    <svg viewBox="0 0 200 200" class="w-2/3 h-2/3 opacity-30">
-                        <path d="M40 160 L160 160 L160 40 L40 40 Z" fill="none" stroke="var(--sand)" stroke-width="0.5" />
-                        <circle cx="100" cy="100" r="60" fill="none" stroke="var(--golden)" stroke-width="0.5" stroke-dasharray="2" />
-                        <line x1="0" y1="100" x2="200" y2="100" stroke="var(--sand)" stroke-width="0.2" />
-                        <line x1="100" y1="0" x2="100" y2="200" stroke="var(--sand)" stroke-width="0.2" />
+                    <svg viewBox="0 0 200 200" class="w-2/3 h-2/3">
+                        <path d="M40 160 L160 160 L160 40 L40 40 Z" fill="none" stroke="var(--sand)" stroke-width="0.5" stroke-opacity="0.3" />
+                        <circle cx="100" cy="100" r="60" fill="none" stroke="var(--golden)" stroke-width="0.8" stroke-dasharray="2" class="animate-infra" />
+                        <line x1="0" y1="100" x2="200" y2="100" stroke="var(--sand)" stroke-width="0.2" stroke-opacity="0.2" />
+                        <line x1="100" y1="0" x2="100" y2="200" stroke="var(--sand)" stroke-width="0.2" stroke-opacity="0.2" />
                     </svg>
                 </div>
                 <div class="absolute bottom-6 left-6 mono text-[0.6rem] opacity-60">OPERATIONAL_SCOPE: MULTI_DOMAIN</div>
@@ -230,17 +303,17 @@
         </div>
     </section>
 
-    <!-- 4) WHAT WE DO / ARCHITECTURE (The Solution) -->
-    <section class="bg-[#3B3C2A] py-32 px-10 md:px-20 overflow-hidden relative border-t border-white/5">
+    <!-- 4) ARCHITECTURE -->
+    <section id="architecture" class="relative z-10 bg-[#3B3C2A] py-32 px-10 md:px-20 overflow-hidden border-t border-white/5">
         <div class="max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-start mb-20 gap-16">
             <div class="lg:w-1/2">
-                <div class="mono text-[#FFCC33] mb-4">What We Do</div>
+                <div class="mono text-[#FFCC33] mb-4 font-bold">What We Do</div>
                 <h2 class="text-5xl md:text-6xl font-bold mb-6">Integrated Detection Architectures</h2>
                 <p class="text-lg opacity-60 leading-relaxed">
                     We combine distributed acoustic sensing, advanced signal analysis, and coordinated control layers to enable early identification and informed action.
                 </p>
             </div>
-            <div class="lg:w-1/3 mono text-sm opacity-60 leading-loose border-l border-white/10 pl-8">
+            <div class="lg:w-1/3 mono text-[0.65rem] text-[#FFCC33] opacity-80 leading-loose border-l border-[#FFCC33]/20 pl-8">
                 SCALABLE. MODULAR. INFRASTRUCTURE-READY.<br><br>
                 [01] ACOUSTIC_DISTRIBUTED_ARRAY <br>
                 [02] AI_SIGNAL_INTELLIGENCE <br>
@@ -255,85 +328,130 @@
                 <line x1="0" y1="200" x2="1000" y2="200" stroke="white" stroke-width="0.5" stroke-opacity="0.1" />
                 <circle cx="500" cy="200" r="150" fill="none" stroke="white" stroke-width="0.5" stroke-opacity="0.05" />
                 <g class="radar-line">
-                    <line x1="500" y1="200" x2="500" y2="50" stroke="var(--golden)" stroke-width="1" stroke-opacity="0.5" />
+                    <line x1="500" y1="200" x2="500" y2="50" stroke="var(--golden)" stroke-width="1.5" stroke-opacity="0.8" />
                 </g>
-                <rect x="470" y="170" width="60" height="60" stroke="var(--golden)" fill="none" stroke-width="1.5" />
-                <text x="500" y="160" fill="var(--golden)" font-size="8" text-anchor="middle" class="mono">CORE_AI_PROCESSOR</text>
+                <rect x="475" y="175" width="50" height="50" stroke="var(--golden)" fill="none" stroke-width="1" class="animate-infra" />
+                <!-- Placeholder chevron hub icon -->
+                <svg x="485" y="185" width="30" height="30" viewBox="0 0 100 100" class="text-[#FFCC33] fill-none logo-chevron">
+                    <path d="M25 80L50 20L75 80" stroke="currentColor" stroke-width="10"/>
+                </svg>
+                <text x="500" y="160" fill="var(--golden)" font-size="7" text-anchor="middle" class="mono font-bold animate-infra">CORE_AI_PROCESSOR</text>
             </svg>
         </div>
     </section>
 
-    <!-- 6) FINAL CONTACT -->
-    <section class="bg-[#3B3C2A] py-32 px-10 md:px-20 border-t border-white/5 relative">
+    <!-- 6) CONTACT -->
+    <section class="relative z-10 bg-[#3B3C2A] py-32 px-10 md:px-20 border-t border-white/5">
         <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-20">
             <div>
-                <div class="mono text-[#FFCC33] mb-4">Strategic Contact</div>
+                <div class="mono text-[#FFCC33] mb-4 font-bold">Strategic Contact</div>
                 <h2 class="text-5xl font-bold mb-8">Deploy Anashield.</h2>
                 <p class="text-xl opacity-60 leading-relaxed mb-10">
                     Discuss deployment strategies for military contexts, borders, cities, and strategic energy infrastructure.
                 </p>
-                <div class="space-y-4 opacity-40 mono text-xs">
-                    <p>OFFICE: BERLIN_01 // HUB: LONDON_WEST</p>
-                    <p>DIRECT: CONTACT@ANASHIELD.COM</p>
-                </div>
             </div>
             
             <div class="module-border p-10 bg-black/10">
-                <form class="space-y-10" onsubmit="event.preventDefault();">
+                <form class="space-y-10" id="contact-form">
                     <div class="relative">
-                        <label class="mono text-[0.6rem] text-[#FFCC33] block mb-2">ENTITY_ORGANIZATION</label>
-                        <input type="text" placeholder="ENTER ORGANIZATION..." class="bg-transparent border-b border-white/20 w-full py-2 outline-none focus:border-[#FFCC33] transition-colors mono text-sm">
+                        <label class="mono text-[0.6rem] text-[#FFCC33] block mb-2 font-bold">ENTITY_ORGANIZATION</label>
+                        <input type="text" required placeholder="ENTER ORGANIZATION..." class="bg-transparent border-b border-white/20 w-full py-2 outline-none transition-colors mono text-sm">
                     </div>
                     <div class="relative">
-                        <label class="mono text-[0.6rem] text-[#FFCC33] block mb-2">SECURE_EMAIL</label>
-                        <input type="email" placeholder="IDENTITY@OFFICIAL.GOV" class="bg-transparent border-b border-white/20 w-full py-2 outline-none focus:border-[#FFCC33] transition-colors mono text-sm">
+                        <label class="mono text-[0.6rem] text-[#FFCC33] block mb-2 font-bold">SECURE_EMAIL</label>
+                        <input type="email" required placeholder="IDENTITY@OFFICIAL.GOV" class="bg-transparent border-b border-white/20 w-full py-2 outline-none transition-colors mono text-sm">
                     </div>
-                    <button class="w-full bg-[#EAE6DA] text-[#3B3C2A] py-4 font-bold mono tracking-widest hover:bg-[#FFCC33] transition-colors uppercase">
-                        Request Secure Contact
+                    <button type="submit" class="w-full bg-[#EAE6DA] text-[#3B3C2A] py-4 font-bold mono tracking-widest hover:bg-[#FFCC33] transition-colors uppercase text-xs cursor-pointer border-none">
+                        Initiate Dialogue
                     </button>
                 </form>
             </div>
         </div>
     </section>
 
-    <!-- 7) CINEMATIC OUTRO -->
-    <section class="relative w-full h-[70vh] md:h-[90vh] overflow-hidden bg-black">
+    <!-- CINEMATIC OUTRO -->
+    <section class="relative w-full h-[70vh] md:h-[90vh] overflow-hidden bg-black z-10">
         <video autoplay muted loop playsinline class="absolute inset-0 w-full h-full object-cover grayscale opacity-40 animate-cinematic">
             <source src="outro.mp4" type="video/mp4">
-            <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=2000" class="w-full h-full object-cover grayscale opacity-40">
         </video>
-
-        <div class="absolute inset-0 pointer-events-none">
-            <div class="absolute top-10 left-10 w-20 h-20 border-l border-t border-white/20"></div>
-            <div class="absolute top-10 right-10 w-20 h-20 border-r border-t border-white/20"></div>
-            <div class="absolute bottom-10 left-10 w-20 h-20 border-l border-b border-white/20"></div>
-            <div class="absolute bottom-10 right-10 w-20 h-20 border-r border-b border-white/20"></div>
-        </div>
-
         <div class="absolute inset-0 flex items-center justify-center px-6">
             <div class="text-center max-w-5xl">
-                <div class="mono text-[#FFCC33] text-sm mb-6 tracking-[0.4em]">Integrated. Autonomous. Absolute.</div>
+                <!-- OUTRO Chevron placeholder -->
+                <div class="logo-placeholder w-16 h-16 mx-auto mb-10">
+                    <svg viewBox="0 0 100 100" class="w-full h-full text-[#FFCC33] fill-none logo-chevron animate-infra">
+                        <path d="M25 80L50 20L75 80" stroke="currentColor" stroke-width="4"/>
+                    </svg>
+                </div>
                 <h2 class="text-5xl md:text-8xl font-bold uppercase tracking-tight leading-none mb-8">
                     Sovereign Protection <br>at Scale.
                 </h2>
-                <div class="w-24 h-[1px] bg-white/20 mx-auto mb-12"></div>
-                <p class="mono text-xs opacity-40 tracking-widest uppercase">Anashield Intelligence Systems // 2026</p>
+                <button onclick="toggleModal()" class="btn-tactical-primary">Initiate Dialogue</button>
             </div>
         </div>
-        
-        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-60"></div>
+        <!-- Payoff HUD corners -->
+        <div class="absolute top-10 left-10 w-20 h-20 border-l border-t border-[#FFCC33]/40"></div>
+        <div class="absolute bottom-10 right-10 w-20 h-20 border-r border-b border-[#FFCC33]/40"></div>
     </section>
 
-    <footer class="py-16 px-10 md:px-20 border-t border-white/5 text-[0.6rem] mono opacity-30 flex flex-col md:flex-row justify-between items-center gap-6">
-        <div>ANASHIELD SYSTEMS © 2024-2026 // ALL RIGHTS RESERVED</div>
+    <!-- MODAL -->
+    <div id="contact-modal" class="items-center justify-center p-6">
+        <div class="max-w-xl w-full module-border bg-[#3B3C2A] p-12 relative">
+            <button onclick="toggleModal()" class="absolute top-6 right-6 mono opacity-40 hover:opacity-100 bg-transparent border-none cursor-pointer text-[#EAE6DA]">[ CLOSE ]</button>
+            <div class="mono text-[#FFCC33] mb-4 font-bold">Secure Channel</div>
+            <h3 class="text-3xl font-bold mb-8 uppercase">Initiate Dialogue</h3>
+            <form class="space-y-8" id="modal-form">
+                <input type="text" required placeholder="ORGANIZATION NAME" class="bg-transparent border-b border-white/20 w-full py-4 outline-none mono text-sand">
+                <input type="email" required placeholder="SECURE EMAIL" class="bg-transparent border-b border-white/20 w-full py-4 outline-none mono text-sand">
+                <textarea placeholder="INQUIRY SCOPE" class="bg-transparent border-b border-white/20 w-full py-4 outline-none mono h-32 text-sand"></textarea>
+                <button type="submit" class="btn-tactical-primary w-full justify-center">SEND REQUEST</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="relative z-10 py-16 px-10 md:px-20 border-t border-white/5 text-[0.6rem] mono opacity-40 flex flex-col md:flex-row justify-between items-center bg-[#3B3C2A]">
+        <div class="flex items-center gap-4">
+            <div class="logo-placeholder w-6 h-6">
+                <svg viewBox="0 0 100 100" class="w-full h-full text-sand fill-none logo-chevron">
+                    <path d="M25 80L50 20L75 80" stroke="currentColor" stroke-width="6"/>
+                </svg>
+            </div>
+            <div>ANASHIELD SYSTEMS © 2026 // ALL RIGHTS RESERVED</div>
+        </div>
         <div class="flex gap-10">
-            <a href="#" class="hover:text-white transition-colors">SYSTEM_POLICIES</a>
-            <a href="#" class="hover:text-white transition-colors">SOVEREIGN_COMPLIANCE</a>
+            <a href="#" class="hover:text-white transition-colors">POLICIES</a>
+            <a href="#" class="hover:text-white transition-colors">COMPLIANCE</a>
         </div>
     </footer>
 
     <script>
-        const observerOptions = { threshold: 0.15 };
+        function toggleModal() {
+            document.getElementById('contact-modal').classList.toggle('active');
+            document.body.style.overflow = document.getElementById('contact-modal').classList.contains('active') ? 'hidden' : 'auto';
+        }
+
+        const handleForm = (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerText;
+            btn.innerText = "TRANSMITTING...";
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.innerText = "REQUEST RECEIVED";
+                btn.style.backgroundColor = "var(--status-green)";
+                setTimeout(() => {
+                    if(document.getElementById('contact-modal').classList.contains('active')) toggleModal();
+                    btn.innerText = originalText;
+                    btn.style.backgroundColor = "";
+                    btn.disabled = false;
+                    e.target.reset();
+                }, 2000);
+            }, 1500);
+        };
+
+        document.getElementById('contact-form').onsubmit = handleForm;
+        document.getElementById('modal-form').onsubmit = handleForm;
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -341,12 +459,13 @@
                     entry.target.style.transform = "translateY(0)";
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.1 });
 
-        document.querySelectorAll('section').forEach(section => {
-            section.style.opacity = "0.9";
-            section.style.transition = "all 1s cubic-bezier(0.16, 1, 0.3, 1)";
-            observer.observe(section);
+        document.querySelectorAll('section').forEach(s => {
+            s.style.opacity = "0";
+            s.style.transform = "translateY(30px)";
+            s.style.transition = "all 1s cubic-bezier(0.16, 1, 0.3, 1)";
+            observer.observe(s);
         });
     </script>
 </body>
