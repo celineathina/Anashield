@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANASHIELD | Integrated Aerial Intelligence Systems</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;600&display=swap');
+        
+        :root {
+            --primary-bg: #3B3C2A;
+            --sand: #EAE6DA;
+            --golden: #FFCC33;
+            --sage: #4A7C59;
+            --status-green: #4CAF50;
+            --status-red: #A13636;
+        }
+
+        body {
+            background-color: var(--primary-bg);
+            color: var(--sand);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .technical {
+            font-family: 'Space Grotesk', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+        }
+
+        .mono {
+            font-family: 'Space Mono', monospace;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+        }
+
+        /* HUD Corner Markers */
+        .hud-corner {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border: 1px solid var(--golden);
+            opacity: 0.4;
+        }
+
+        /* Tactical Grid Overlay */
+        .grid-overlay {
+            background-image: radial-gradient(circle, rgba(234, 230, 218, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* Scanning Line Animation */
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100vh); }
+        }
+        .scan-line {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--golden), transparent);
+            opacity: 0.1;
+            animation: scan 8s linear infinite;
+            pointer-events: none;
+        }
+
+        .btn-tactical-primary {
+            background-color: var(--sand);
+            color: var(--primary-bg);
+            padding: 1rem 2rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s ease;
+        }
+        .btn-tactical-primary:hover {
+            background-color: var(--golden);
+            transform: translateX(5px);
+        }
+
+        .btn-tactical-outline {
+            border: 1px solid var(--golden);
+            color: var(--sand);
+            padding: 1rem 2rem;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+        .btn-tactical-outline:hover {
+            background-color: rgba(255, 204, 51, 0.1);
+        }
+
+        .module-border {
+            border: 1px solid rgba(234, 230, 218, 0.1);
+        }
+
+        /* Radar Animation */
+        @keyframes radar-sweep {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .radar-line {
+            transform-origin: center;
+            animation: radar-sweep 4s linear infinite;
+        }
+
+        /* Cinematic Outro Slow Zoom */
+        @keyframes cinematic-zoom {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+        .animate-cinematic {
+            animation: cinematic-zoom 20s ease-out infinite alternate;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="scan-line"></div>
+
+    <!-- 1) TACTICAL HERO SECTION -->
+    <section class="relative h-screen w-full flex flex-col justify-end overflow-hidden grid-overlay">
+        <div class="absolute top-10 left-10 hud-corner border-r-0 border-b-0"></div>
+        <div class="absolute top-10 right-10 hud-corner border-l-0 border-b-0"></div>
+        <div class="absolute bottom-10 left-10 hud-corner border-r-0 border-t-0"></div>
+        <div class="absolute bottom-10 right-10 hud-corner border-l-0 border-t-0"></div>
+
+        <div class="absolute top-10 left-20 mono text-opacity-60 text-sand flex flex-col gap-1">
+            <span>CORE_SYSTEM: ARM_ST_01</span>
+            <span>LAT: 52.5200° N | LONG: 13.4050° E</span>
+            <span class="text-[#FFCC33]">STATUS: ACTIVE_SURVEILLANCE</span>
+        </div>
+
+        <video autoplay muted loop playsinline class="absolute inset-0 z-0 w-full h-full object-cover grayscale opacity-20">
+            <source src="hero.mp4" type="video/mp4">
+        </video>
+        
+        <div class="absolute inset-0 z-10 bg-gradient-to-t from-[#3B3C2A] via-[#3B3C2A]/60 to-transparent"></div>
+
+        <div class="relative z-20 px-10 md:px-20 pb-20 w-full grid grid-cols-1 md:grid-cols-12 gap-10 items-end">
+            <div class="md:col-span-8">
+                <div class="mono text-[#FFCC33] mb-4 tracking-[0.3em]">Institutional Grade Autonomy</div>
+                <h1 class="text-6xl md:text-9xl font-bold mb-6 leading-none">ANASHIELD</h1>
+                <p class="text-xl md:text-2xl font-light max-w-2xl opacity-80 leading-relaxed mb-10">
+                    Sovereign-ready architectures for <span class="text-white font-medium">unrestricted airspace awareness</span>. Built for complexity. Scaled for defense.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <button class="btn-tactical-primary">INITIATE DIALOGUE</button>
+                    <button class="btn-tactical-outline">EXPLORE ARCHITECTURE</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2) STRATEGIC CONTEXT -->
+    <section class="bg-[#EAE6DA] text-[#3B3C2A] py-32 px-10 md:px-20 grid grid-cols-1 md:grid-cols-2 border-y border-[#3B3C2A]/10">
+        <div class="border-r border-[#3B3C2A]/10 pr-10 md:pr-20 mb-10 md:mb-0">
+            <div class="mono text-xs mb-8 opacity-60">Section 01 // The Threat Model</div>
+            <h2 class="text-5xl md:text-7xl font-bold leading-tight uppercase">The Character of Airspace is Changing.</h2>
+        </div>
+        <div class="pl-0 md:pl-20 flex flex-col justify-center">
+            <div class="space-y-10 text-2xl font-light leading-relaxed">
+                <p>Low-altitude systems are increasingly accessible and widely distributed.</p>
+                <p>Traditional infrastructures were not designed for this scale, cost profile, or operating environment.</p>
+                <p class="font-bold text-[#A13636]">Structural imbalance is no longer acceptable.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4) ARCHITECTURE DIAGRAM -->
+    <section class="bg-[#3B3C2A] py-32 px-10 md:px-20 overflow-hidden relative">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start mb-20 gap-10">
+            <div class="md:w-1/2">
+                <div class="mono text-[#FFCC33] mb-4">Integrated Architecture</div>
+                <h2 class="text-5xl md:text-6xl font-bold mb-6">Autonomous Processing & Sensing</h2>
+            </div>
+        </div>
+
+        <div class="relative w-full aspect-video md:aspect-[21/9] module-border bg-black/10 overflow-hidden">
+            <div class="absolute inset-0 grid-overlay opacity-30"></div>
+            <svg viewBox="0 0 1000 400" class="w-full h-full">
+                <line x1="500" y1="0" x2="500" y2="400" stroke="white" stroke-width="0.5" stroke-opacity="0.1" />
+                <line x1="0" y1="200" x2="1000" y2="200" stroke="white" stroke-width="0.5" stroke-opacity="0.1" />
+                <circle cx="500" cy="200" r="150" fill="none" stroke="white" stroke-width="0.5" stroke-opacity="0.05" />
+                <g class="radar-line">
+                    <line x1="500" y1="200" x2="500" y2="50" stroke="var(--golden)" stroke-width="1" stroke-opacity="0.5" />
+                </g>
+                <rect x="470" y="170" width="60" height="60" stroke="var(--golden)" fill="none" stroke-width="1.5" />
+            </svg>
+        </div>
+    </section>
+
+    <!-- 6) FINAL CONTACT -->
+    <section class="bg-[#3B3C2A] py-32 px-10 md:px-20 border-t border-white/5 relative">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-20">
+            <div>
+                <div class="mono text-[#FFCC33] mb-4">Strategic Contact</div>
+                <h2 class="text-5xl font-bold mb-8">Deploy Anashield.</h2>
+                <p class="text-xl opacity-60 leading-relaxed mb-10">
+                    Institutional partnerships and deployment discussions for national defense, borders, and critical energy assets.
+                </p>
+                <div class="space-y-4 opacity-40 mono text-xs">
+                    <p>OFFICE: BERLIN_01 // HUB: LONDON_WEST</p>
+                    <p>DIRECT: CONTACT@ANASHIELD.COM</p>
+                </div>
+            </div>
+            
+            <div class="module-border p-10 bg-black/10">
+                <form class="space-y-10" onsubmit="event.preventDefault();">
+                    <div class="relative">
+                        <label class="mono text-[0.6rem] text-[#FFCC33] block mb-2">PARTNER_ORGANIZATION</label>
+                        <input type="text" placeholder="ENTER ENTITY NAME..." class="bg-transparent border-b border-white/20 w-full py-2 outline-none focus:border-[#FFCC33] transition-colors mono text-sm">
+                    </div>
+                    <div class="relative">
+                        <label class="mono text-[0.6rem] text-[#FFCC33] block mb-2">EMAIL_SECURE</label>
+                        <input type="email" placeholder="IDENTITY@DOMAIN.GOV" class="bg-transparent border-b border-white/20 w-full py-2 outline-none focus:border-[#FFCC33] transition-colors mono text-sm">
+                    </div>
+                    <button class="w-full bg-[#EAE6DA] text-[#3B3C2A] py-4 font-bold mono tracking-widest hover:bg-[#FFCC33] transition-colors uppercase">
+                        Request Secure Link
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7) CINEMATIC OUTRO (THE payoff) -->
+    <section class="relative w-full h-[70vh] md:h-[90vh] overflow-hidden bg-black">
+        <!-- Wide Cinematic Video -->
+        <video 
+            autoplay muted loop playsinline 
+            class="absolute inset-0 w-full h-full object-cover grayscale opacity-40 animate-cinematic"
+        >
+            <source src="outro.mp4" type="video/mp4">
+            <!-- Fallback: High-contrast aerial landscape -->
+            <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=2000" class="w-full h-full object-cover grayscale opacity-40">
+        </video>
+
+        <!-- Overlay HUD Framing -->
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute top-10 left-10 w-20 h-20 border-l border-t border-white/20"></div>
+            <div class="absolute top-10 right-10 w-20 h-20 border-r border-t border-white/20"></div>
+            <div class="absolute bottom-10 left-10 w-20 h-20 border-l border-b border-white/20"></div>
+            <div class="absolute bottom-10 right-10 w-20 h-20 border-r border-b border-white/20"></div>
+            
+            <!-- Slow Scrolling Metadata -->
+            <div class="absolute bottom-20 left-1/2 -translate-x-1/2 text-center">
+                <div class="mono text-[0.6rem] opacity-30 tracking-[0.5em] mb-4">SOVEREIGN_HORIZON_INITIATIVE</div>
+                <div class="h-10 w-[1px] bg-white/20 mx-auto"></div>
+            </div>
+        </div>
+
+        <!-- Center Message -->
+        <div class="absolute inset-0 flex items-center justify-center px-6">
+            <div class="text-center max-w-5xl">
+                <div class="mono text-[#FFCC33] text-sm mb-6 tracking-[0.4em]">Integrated. Autonomous. Absolute.</div>
+                <h2 class="text-5xl md:text-8xl font-bold uppercase tracking-tight leading-none mb-8">
+                    The Future of <br>Sovereign Defense.
+                </h2>
+                <div class="w-24 h-[1px] bg-white/20 mx-auto mb-12"></div>
+                <p class="mono text-xs opacity-40 tracking-widest uppercase">Anashield Intelligence Systems // 2026</p>
+            </div>
+        </div>
+        
+        <!-- Subtle Vignette -->
+        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black opacity-60"></div>
+    </section>
+
+    <footer class="py-16 px-10 md:px-20 border-t border-white/5 text-[0.6rem] mono opacity-30 flex flex-col md:flex-row justify-between items-center gap-6">
+        <div>ANASHIELD SYSTEMS © 2024-2026 // ALL RIGHTS RESERVED</div>
+        <div class="flex gap-10">
+            <a href="#" class="hover:text-white transition-colors">SYSTEM_POLICIES</a>
+            <a href="#" class="hover:text-white transition-colors">SOVEREIGN_COMPLIANCE</a>
+            <a href="#" class="hover:text-white transition-colors">SECURITY_VETTING</a>
+        </div>
+    </footer>
+
+    <script>
+        const observerOptions = { threshold: 0.15 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = "1";
+                    entry.target.style.transform = "translateY(0)";
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            section.style.opacity = "0.9";
+            section.style.transition = "all 1s cubic-bezier(0.16, 1, 0.3, 1)";
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
