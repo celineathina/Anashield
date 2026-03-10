@@ -67,68 +67,42 @@
             background-size: 30px 30px;
         }
 
-        /* Enhanced Scanning Line Animation - More Noticeable */
-        @keyframes scan {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100vh); }
-        }
-        .scan-line {
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 2px; /* Increased height */
-            background: linear-gradient(to right, transparent, var(--golden), transparent);
-            box-shadow: 0 0 15px var(--golden); /* Added glow */
-            opacity: 0.3; /* Increased opacity */
-            animation: scan 8s linear infinite; /* Slightly faster for more kinetic energy */
-            pointer-events: none;
-            z-index: 10;
+        /* Outward pulse animation (architecture panel) */
+        @keyframes pulseOut {
+          0%   { transform: scale(0.75); opacity: 0; }
+          18%  { opacity: 0.85; }
+          70%  { opacity: 0.25; }
+          100% { transform: scale(1.65); opacity: 0; }
         }
 
-        .btn-tactical-primary {
-            background-color: var(--sand);
-            color: var(--primary-bg);
-            padding: 1rem 2rem;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            border: none;
-        }
-        .btn-tactical-primary:hover {
-            background-color: var(--golden);
-            transform: translateX(5px);
+        .pulse-ring {
+          transform-origin: center;
+          animation: pulseOut 3.2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
         }
 
-        .btn-tactical-outline {
-            border: 1px solid var(--golden);
-            color: var(--sand);
-            padding: 1rem 2rem;
-            font-weight: 700;
-            transition: all 0.2s ease;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-        }
-        .btn-tactical-outline:hover {
-            background-color: rgba(255, 204, 51, 0.1);
-            transform: scale(1.02);
+        .pulse-ring.delay-1 { animation-delay: 0.75s; }
+        .pulse-ring.delay-2 { animation-delay: 1.5s; }
+
+        .pulse-glow {
+          filter: drop-shadow(0 0 6px rgba(255, 204, 51, 0.25));
         }
 
-        .module-border {
-            border: 1px solid rgba(234, 230, 218, 0.1);
-            backdrop-blur: 2px;
+        .sensor-chevron {
+          fill: none;
+          stroke: var(--golden);
+          stroke-width: 3;
+          stroke-linecap: round;
+          stroke-linejoin: round;
         }
 
-        /* Radar Animation */
-        @keyframes radar-sweep {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        .dot-target {
+          fill: #A13636;
+          filter: drop-shadow(0 0 5px rgba(161, 54, 54, 0.6));
         }
-        .radar-line {
-            transform-origin: center;
-            animation: radar-sweep 8s linear infinite;
+
+        .dot-confirm {
+          fill: #4CAF50;
+          filter: drop-shadow(0 0 5px rgba(76, 175, 80, 0.6));
         }
 
         /* Cinematic Outro Slow Zoom */
@@ -292,9 +266,9 @@
                <div class="absolute inset-0 z-0">
                     <img src="assets/beacons_03.png" 
                          alt="Operational Scope" 
-                         class="w-full h-full object-cover grayscale opacity-50 transition-opacity duration-700 group-hover:opacity-70">
+                         class="w-full h-full object-cover">
                 </div>
-                <div class="absolute bottom-6 left-6 mono text-[0.6rem] opacity-60">OPERATIONAL_SCOPE: MULTI_DOMAIN</div>
+                <div class="absolute bottom-6 left-6 mono text-[0.6rem] opacity-0">OPERATIONAL_SCOPE: MULTI_DOMAIN</div>
             </div>
         </div>
     </section>
@@ -319,39 +293,93 @@
 
         <div class="relative w-full aspect-video md:aspect-[21/9] module-border bg-black/10 overflow-hidden">
             <div class="absolute inset-0 grid-overlay opacity-30"></div>
-            <svg <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-    <svg viewBox="0 0 1000 400" class="w-full h-full opacity-60">
 
-        <!-- Background Grid Lines -->
-        <line x1="500" y1="0" x2="500" y2="400" stroke="white" stroke-width="0.5" stroke-opacity="0.08"/>
-        <line x1="0" y1="200" x2="1000" y2="200" stroke="white" stroke-width="0.5" stroke-opacity="0.08"/>
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <svg viewBox="0 0 1200 420" class="w-full h-full">
+                    <!-- faint crosshair -->
+                    <line x1="600" y1="0" x2="600" y2="420" stroke="rgba(234,230,218,0.06)" />
+                    <line x1="0" y1="210" x2="1200" y2="210" stroke="rgba(234,230,218,0.06)" />
 
-        <!-- NODE LEFT -->
-        <g class="radar-node" transform="translate(250,200)">
-            <circle class="pulse pulse1" r="15"/>
-            <circle class="pulse pulse2" r="15"/>
-            <circle class="core-dot red" r="4"/>
-        </g>
+                    <!-- reusable sensor chevron -->
+                    <defs>
+                        <g id="sensor">
+                            <path d="M0 22 L12 -10 L24 22" class="sensor-chevron" />
+                        </g>
+                    </defs>
 
-        <!-- NODE RIGHT -->
-        <g class="radar-node" transform="translate(750,150)">
-            <circle class="pulse pulse1" r="15"/>
-            <circle class="pulse pulse2" r="15"/>
-            <circle class="core-dot green" r="4"/>
-        </g>
+                    <!-- SENSOR 1 (left) -->
+                    <g transform="translate(220 280)">
+                        <g class="pulse-ring pulse-glow">
+                            <circle r="70" fill="none" stroke="#FFCC33" stroke-width="6" stroke-linecap="round"
+                                    stroke-dasharray="160 600" stroke-dashoffset="40" opacity="0.9"/>
+                            <circle r="105" fill="none" stroke="#FFCC33" stroke-width="4" stroke-linecap="round"
+                                    stroke-dasharray="140 800" stroke-dashoffset="260" opacity="0.5"/>
+                        </g>
+                        <g class="pulse-ring delay-1 pulse-glow">
+                            <circle r="70" fill="none" stroke="#FFCC33" stroke-width="6" stroke-linecap="round"
+                                    stroke-dasharray="160 600" stroke-dashoffset="40" opacity="0.9"/>
+                            <circle r="105" fill="none" stroke="#FFCC33" stroke-width="4" stroke-linecap="round"
+                                    stroke-dasharray="140 800" stroke-dashoffset="260" opacity="0.5"/>
+                        </g>
+                        <g class="pulse-ring delay-2 pulse-glow">
+                            <circle r="70" fill="none" stroke="#FFCC33" stroke-width="6" stroke-linecap="round"
+                                    stroke-dasharray="160 600" stroke-dashoffset="40" opacity="0.9"/>
+                            <circle r="105" fill="none" stroke="#FFCC33" stroke-width="4" stroke-linecap="round"
+                                    stroke-dasharray="140 800" stroke-dashoffset="260" opacity="0.5"/>
+                        </g>
+                        <use href="#sensor" x="-12" y="-10" />
+                        <circle cx="55" cy="-6" r="5" class="dot-confirm" opacity="0.8"/>
+                    </g>
 
-        <!-- CENTER PROCESSOR -->
-        <g transform="translate(500,200)">
-            <rect x="-25" y="-25" width="50" height="50"
-                  stroke="var(--golden)" fill="none"
-                  stroke-width="1"
-                  class="animate-infra"/>
-            <circle class="pulse pulse-center" r="30"/>
-        </g>
+                    <!-- SENSOR 2 (center) -->
+                    <g transform="translate(600 210)">
+                        <g class="pulse-ring pulse-glow">
+                            <circle r="90" fill="none" stroke="#FFCC33" stroke-width="7" stroke-linecap="round"
+                                    stroke-dasharray="220 900" stroke-dashoffset="60" opacity="0.95"/>
+                            <circle r="140" fill="none" stroke="#FFCC33" stroke-width="4" stroke-linecap="round"
+                                    stroke-dasharray="180 1100" stroke-dashoffset="420" opacity="0.35"/>
+                        </g>
+                        <g class="pulse-ring delay-1 pulse-glow">
+                            <circle r="90" fill="none" stroke="#FFCC33" stroke-width="7" stroke-linecap="round"
+                                    stroke-dasharray="220 900" stroke-dashoffset="60" opacity="0.95"/>
+                            <circle r="140" fill="none" stroke="#FFCC33" stroke-width="4" stroke-linecap="round"
+                                    stroke-dasharray="180 1100" stroke-dashoffset="420" opacity="0.35"/>
+                        </g>
+                        <g class="pulse-ring delay-2 pulse-glow">
+                            <circle r="90" fill="none" stroke="#FFCC33" stroke-width="7" stroke-linecap="round"
+                                    stroke-dasharray="220 900" stroke-dashoffset="60" opacity="0.95"/>
+                            <circle r="140" fill="none" stroke="#FFCC33" stroke-width="4" stroke-linecap="round"
+                                    stroke-dasharray="180 1100" stroke-dashoffset="420" opacity="0.35"/>
+                        </g>
+                        <use href="#sensor" x="-12" y="-10" />
+                        <circle cx="-70" cy="-75" r="6" class="dot-target" opacity="0.85"/>
+                    </g>
 
-    </svg>
-</div>
-    </svg>
+                    <!-- SENSOR 3 (right) -->
+                    <g transform="translate(980 300)">
+                        <g class="pulse-ring pulse-glow">
+                            <circle r="78" fill="none" stroke="#FFCC33" stroke-width="6" stroke-linecap="round"
+                                    stroke-dasharray="170 700" stroke-dashoffset="120" opacity="0.9"/>
+                            <circle r="120" fill="none" stroke="#FFCC33" stroke-width="4" stroke-linecap="round"
+                                    stroke-dasharray="150 920" stroke-dashoffset="520" opacity="0.4"/>
+                        </g>
+                        <g class="pulse-ring delay-1 pulse-glow">
+                            <circle r="78" fill="none" stroke="#FFCC33" stroke-width="6" stroke-linecap="round"
+                                    stroke-dasharray="170 700" stroke-dashoffset="120" opacity="0.9"/>
+                            <circle r="120" fill="none" stroke="#FFCC33" stroke-width="4" stroke-linecap="round"
+                                    stroke-dasharray="150 920" stroke-dashoffset="520" opacity="0.4"/>
+                        </g>
+                        <g class="pulse-ring delay-2 pulse-glow">
+                            <circle r="78" fill="none" stroke="#FFCC33" stroke-width="6" stroke-linecap="round"
+                                    stroke-dasharray="170 700" stroke-dashoffset="120" opacity="0.9"/>
+                            <circle r="120" fill="none" stroke="#FFCC33" stroke-width="4" stroke-linecap="round"
+                                    stroke-dasharray="150 920" stroke-dashoffset="520" opacity="0.4"/>
+                        </g>
+                        <use href="#sensor" x="-12" y="-10" />
+                        <circle cx="15" cy="45" r="6" class="dot-target" opacity="0.85"/>
+                    </g>
+                </svg>
+            </div>
         </div>
     </section>
 
